@@ -9,6 +9,18 @@ Kafka in action and further optional research links:
 - [IBM Kafka architecture](https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-overview/)
 - [Setup Kafka on Kubernetes](https://phoenixnap.com/kb/kafka-on-kubernetes)
 
+### The Number of Partitions
+
+This Confluent article indicates how to plan the numnber of partitions.
+
+- [Number of partitions](https://www.confluent.io/blog/how-choose-number-topics-partitions-kafka-cluster/)
+
+## Best pratices and anti patterns
+
+_Kafka_ can create topics automaticaly, but it is not recommended. The best practice is create them manually. It is possible create topic using script code, like _sh_ or even _terraform_ and _ansible_.
+
+_Terraform_ can control the topic creation and also the ACL management.
+
 ## Installed Packages Locally
 
 - Pipenv
