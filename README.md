@@ -9,7 +9,7 @@ Kafka in action and further optional research links:
 - [IBM Kafka architecture](https://ibm-cloud-architecture.github.io/refarch-eda/technology/kafka-overview/)
 - [Setup Kafka on Kubernetes](https://phoenixnap.com/kb/kafka-on-kubernetes)
 
-### The Number of Partitions
+## The Number of Partitions
 
 This Confluent article indicates how to plan the numnber of partitions.
 
@@ -23,4 +23,12 @@ _Terraform_ can control the topic creation and also the ACL management.
 
 ## Installed Packages Locally
 
-- Pipenv
+## Distributed Systems Reading Group
+
+- _MIT_ [group link](http://dsrg.pdos.csail.mit.edu/papers/)
+
+## Compression
+
+An article about the pros and cons, [here is the link](https://blog.cloudflare.com/squeezing-the-firehose/)
+
+**Here Is a question**: what is network overhead?
