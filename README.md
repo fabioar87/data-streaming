@@ -32,3 +32,13 @@ _Terraform_ can control the topic creation and also the ACL management.
 An article about the pros and cons, [here is the link](https://blog.cloudflare.com/squeezing-the-firehose/)
 
 **Here Is a question**: what is network overhead?
+
+## Kafka Local Cluster Config
+
+[Kind](https://kind.sigs.k8s.io/) is used to create the local kafka cluster (using the kafka on kubernetes model).Kind command to create the cluster:
+
+```
+$ kind create cluster --config YAML_FILE --name CLUSTER_NAME
+```
+
+The local cluster is configured with 3 nodes (1 control plane and two worker nodes)
