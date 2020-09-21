@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: zk
+  name: zk-cs
+spec:
+  selector:
+      app: zk
+  ports:
+  - port: 2181
+    name: client
