@@ -27,7 +27,7 @@ class Turnstile(Producer):
             .replace("'", "")
         )
 
-        topic_name = f"turnstile-station-{station_name}"
+        topic_name = f"com.udacity.chicago.public.transport.turnstile-{station_name}"
         super().__init__(
             topic_name,
             key_schema=Turnstile.key_schema,
