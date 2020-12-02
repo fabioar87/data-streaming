@@ -63,7 +63,7 @@ class Producer:
                 future.result()
             except:
                 logger.info(
-                    "topic creation kafka integration incomplete - skipping"
+                    f"topic creation kafka integration - {self.topic_name} already created"
                 )
 
 

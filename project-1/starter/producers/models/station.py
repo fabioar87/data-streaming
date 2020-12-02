@@ -36,7 +36,7 @@ class Station(Producer):
         )
 
         self.station_id = int(station_id)
-        self.color = color
+        self.color = color.name
         self.dir_a = direction_a
         self.dir_b = direction_b
         self.a_train = None
@@ -56,10 +56,10 @@ class Station(Producer):
             value={
                 "timestamp": self.time_millis(),
                 "station_id": self.station_id,
-                "train_id": train,
+                "train_id": train.train_id,
                 "direction": direction,
                 "line": self.color,
-                "train_status": train.status,
+                "train_status": train.status.name,
                 "prev_station_id": prev_station_id,
                 "prev_direction": prev_direction
             }
