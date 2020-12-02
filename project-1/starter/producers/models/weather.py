@@ -16,7 +16,6 @@ REST_PROXY_URL = "http://localhost:8082"
 
 class Weather(Producer):
     """Defines a simulated weather model"""
-
     status = IntEnum(
         "status", "sunny partly_cloudy cloudy windy precipitation", start=0
     )
@@ -72,9 +71,9 @@ class Weather(Producer):
             headers={"Content-Type": "application/vnd.kafka.avro.v2+json"},
             data=json.dumps(
                 {
-                    "timestamp": ??,
-                    "temperature": ??,
-                    "status": ??
+                    "timestamp": self.time_millis(),
+                    "temperature": self.temp,
+                    "status": self.status
                 }
             ),
         )
