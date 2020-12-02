@@ -5,8 +5,9 @@ import logging
 from pathlib import Path
 import random
 import urllib.parse
-
 import requests
+
+from confluent_kafka import avro
 
 from models.producer import Producer
 
@@ -66,16 +67,25 @@ class Weather(Producer):
     def run(self, month):
         self._set_weather(month)
         logger.info("weather kafka proxy integration")
+
+        data = {
+            "key_schema": self.key_schema,
+            "value_schema": self.value_schema,
+            "records": [
+                {
+                    "value": {
+                        "timestamp": self.time_millis(),
+                        "temperature": self.temp,
+                        "status": self.status,
+                    }
+                }
+            ]
+        }
+
         resp = requests.post(
             f"{REST_PROXY_URL}/topics/{self.topic_name}",
             headers={"Content-Type": "application/vnd.kafka.avro.v2+json"},
-            data=json.dumps(
-                {
-                    "timestamp": self.time_millis(),
-                    "temperature": self.temp,
-                    "status": self.status
-                }
-            ),
+            data=json.dumps(data),
         )
 
         try:
