@@ -1,6 +1,7 @@
 """Creates a turnstile data producer"""
 import logging
 from pathlib import Path
+import time
 
 from confluent_kafka import avro
 
@@ -27,7 +28,7 @@ class Turnstile(Producer):
             .replace("'", "")
         )
 
-        topic_name = f"com.udacity.chicago.public.transport.turnstile-{station_name}"
+        topic_name = f"com.udacity.chicago.public.transport.turnstile"
         super().__init__(
             topic_name,
             key_schema=Turnstile.key_schema,
@@ -48,9 +49,9 @@ class Turnstile(Producer):
             key_schema=self.key_schema,
             value_schema=self.value_schema,
             value={
-                "timestamp": self.time_millis(),
                 "station_id": self.station.station_id,
-                "station_name": self.station.station_name,
+                "station_name": self.station.name,
                 "line": self.station.color
             }
         )
+        time.sleep(1.0)

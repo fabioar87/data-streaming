@@ -1,6 +1,7 @@
 """Methods pertaining to loading and configuring CTA "L" station data."""
 import logging
 from pathlib import Path
+import time
 
 from confluent_kafka import avro
 
@@ -26,7 +27,7 @@ class Station(Producer):
             .replace("'", "")
         )
 
-        topic_name = f"com.udacity.chicago.public.transport.station-{station_name}"
+        topic_name = f"com.udacity.chicago.public.transport.station"
         super().__init__(
             topic_name,
             key_schema=Station.key_schema,
@@ -54,7 +55,6 @@ class Station(Producer):
             key_schema=self.key_schema,
             value_schema=self.value_schema,
             value={
-                "timestamp": self.time_millis(),
                 "station_id": self.station_id,
                 "train_id": train.train_id,
                 "direction": direction,
@@ -64,6 +64,7 @@ class Station(Producer):
                 "prev_direction": prev_direction
             }
         )
+        time.sleep(1.0)
 
     def __str__(self):
         return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(

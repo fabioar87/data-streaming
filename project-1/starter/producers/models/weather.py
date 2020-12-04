@@ -69,12 +69,14 @@ class Weather(Producer):
         logger.info("weather kafka proxy integration")
 
         data = {
-            "key_schema": self.key_schema,
-            "value_schema": self.value_schema,
+            "key_schema": json.dumps(Weather.key_schema),
+            "value_schema": json.dumps(Weather.value_schema),
             "records": [
                 {
+                    "key": {
+                        "timestamp": self.time_millis()
+                    },
                     "value": {
-                        "timestamp": self.time_millis(),
                         "temperature": self.temp,
                         "status": self.status,
                     }

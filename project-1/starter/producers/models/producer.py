@@ -4,12 +4,13 @@ import time
 
 from confluent_kafka import avro
 from confluent_kafka.admin import AdminClient, NewTopic
-from confluent_kafka.avro import AvroProducer
+from confluent_kafka.avro import AvroProducer, CachedSchemaRegistryClient
 
 logger = logging.getLogger(__name__)
 
 BROKER_URL = 'PLAINTEXT://localhost:9092'
 SCHEMA_REGISTRY_URL = 'http://localhost:8081'
+#SCHEMA_REGISTRY_URL = 'http://172.24.0.5:8081'
 
 
 class Producer:
@@ -34,7 +35,7 @@ class Producer:
 
         self.broker_properties = {
             'bootstrap.servers': BROKER_URL,
-            'schema.registry.url': SCHEMA_REGISTRY_URL,
+            'schema.registry.url': SCHEMA_REGISTRY_URL
         }
 
         # If the topic does not already exist, try to create it
