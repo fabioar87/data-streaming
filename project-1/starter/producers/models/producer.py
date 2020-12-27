@@ -10,7 +10,6 @@ logger = logging.getLogger(__name__)
 
 BROKER_URL = 'PLAINTEXT://localhost:9092'
 SCHEMA_REGISTRY_URL = 'http://localhost:8081'
-#SCHEMA_REGISTRY_URL = 'http://172.24.0.5:8081'
 
 
 class Producer:

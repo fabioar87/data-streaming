@@ -1,20 +1,20 @@
 """Defines trends calculations for stations"""
-import logging
-
 import faust
-
+from dataclasses import dataclass
+import logging
 
 logger = logging.getLogger(__name__)
 
 
 # Faust will ingest records from Kafka in this format
+@dataclass
 class Station(faust.Record):
     stop_id: int
     direction_id: str
     stop_name: str
     station_name: str
     station_descriptive_name: str
-    station_id: int
+    station_id: str
     order: int
     red: bool
     blue: bool
@@ -22,36 +22,76 @@ class Station(faust.Record):
 
 
 # Faust will produce records to Kafka in this format
+@dataclass
 class TransformedStation(faust.Record):
-    station_id: int
+    station_id: str
     station_name: str
     order: int
     line: str
 
 
-# TODO: Define a Faust Stream that ingests data from the Kafka Connect stations topic and
-#   places it into a new topic with only the necessary information.
-app = faust.App("stations-stream", broker="kafka://localhost:9092", store="memory://")
-# TODO: Define the input Kafka Topic. Hint: What topic did Kafka Connect output to?
-# topic = app.topic("TODO", value_type=Station)
-# TODO: Define the output Kafka Topic
-# out_topic = app.topic("TODO", partitions=1)
-# TODO: Define a Faust Table
-#table = app.Table(
-#    # "TODO",
-#    # default=TODO,
-#    partitions=1,
-#    changelog_topic=out_topic,
-#)
+def get_line(blue=False, red=False, green=False):
+    if blue:
+        return 'blue'
+    elif red:
+        return 'red'
+    elif green:
+        return 'green'
 
 
-#
-#
-# TODO: Using Faust, transform input `Station` records into `TransformedStation` records. Note that
-# "line" is the color of the station. So if the `Station` record has the field `red` set to true,
-# then you would set the `line` of the `TransformedStation` record to the string `"red"`
-#
-#
+app = faust.App(
+    "faust_stream",
+    broker="kafka://localhost:9092",
+    store="memory://",
+    topic_partitions=1
+)
+topic = app.topic(
+    "connector-cta-stations-stations",
+    value_type=Station
+)
+out_topic = app.topic(
+    "com.udacity.transport.transformed.station",
+    key_type=str,
+    value_type=TransformedStation,
+    partitions=1
+)
+
+
+@app.agent(topic)
+async def processing(stations):
+    async for station in stations:
+        logger.info(f"Station processing - {station.station_id}")
+        transformed_station = TransformedStation(
+            station_id=str(station.station_id),
+            station_name=station.station_name,
+            order=station.order,
+            line=get_line(
+                blue=station.blue,
+                red=station.red,
+                green=station.green
+            )
+        )
+
+        await out_topic.send(
+            key=transformed_station.station_id,
+            value=transformed_station
+        )
+
+
+'''
+table = app.Table(
+    "transformed.station.table",
+    default=TransformedStation,
+    partitions=1,
+    changelog_topic=out_topic,
+)
+'''
+
+# ??
+#@app.agent(out_topic)
+#async def transformed_station_process(out_topic):
+#    async for station in out_topic:
+#        table[station.station_id] = station
 
 
 if __name__ == "__main__":

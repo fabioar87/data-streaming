@@ -64,7 +64,7 @@ class Station(Producer):
                 "prev_direction": prev_direction
             }
         )
-        time.sleep(1.0)
+        time.sleep(0.5)
 
     def __str__(self):
         return "Station | {:^5} | {:<30} | Direction A: | {:^5} | departing to {:<30} | Direction B: | {:^5} | departing to {:<30} | ".format(
