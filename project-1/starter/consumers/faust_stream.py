@@ -60,7 +60,6 @@ out_topic = app.topic(
 @app.agent(topic)
 async def processing(stations):
     async for station in stations:
-        logger.info(f"Station processing - {station.station_id}")
         transformed_station = TransformedStation(
             station_id=str(station.station_id),
             station_name=station.station_name,
@@ -78,20 +77,18 @@ async def processing(stations):
         )
 
 
-'''
 table = app.Table(
     "transformed.station.table",
-    default=TransformedStation,
+    default=list,
     partitions=1,
     changelog_topic=out_topic,
 )
-'''
 
-# ??
-#@app.agent(out_topic)
-#async def transformed_station_process(out_topic):
-#    async for station in out_topic:
-#        table[station.station_id] = station
+
+@app.agent(out_topic)
+async def transformed_station_process(out_topic):
+    async for station in out_topic:
+        table[station.station_id] = station
 
 
 if __name__ == "__main__":
