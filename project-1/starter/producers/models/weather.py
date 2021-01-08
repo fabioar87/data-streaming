@@ -78,7 +78,7 @@ class Weather(Producer):
                     },
                     "value": {
                         "temperature": self.temp,
-                        "status": self.status,
+                        "status": self.status.name,
                     }
                 }
             ]

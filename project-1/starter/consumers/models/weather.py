@@ -1,6 +1,6 @@
 """Contains functionality related to Weather"""
 import logging
-
+from enum import IntEnum
 
 logger = logging.getLogger(__name__)
 
@@ -15,6 +15,8 @@ class Weather:
 
     def process_message(self, message):
         """Handles incoming weather data"""
-        logger.info("weather process_message is incomplete - skipping")
-        logger.info(f"message received - {message}")
-        # TODO: Process incoming weather messages. Set the temperature and status.
+        logger.info(
+            f"weather process_message - {message.key()}"
+        )
+        self.temperature = message.value()['temperature']
+        self.status = message.value()['status']
