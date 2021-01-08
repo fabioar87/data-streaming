@@ -50,7 +50,7 @@ topic = app.topic(
     value_type=Station
 )
 out_topic = app.topic(
-    "com.udacity.transport.transformed.station",
+    "org.chicago.cta.stations.table.v1",
     key_type=str,
     value_type=TransformedStation,
     partitions=1

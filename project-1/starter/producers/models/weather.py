@@ -28,7 +28,7 @@ class Weather(Producer):
     summer_months = set((6, 7, 8))
 
     def __init__(self, month):
-        self.topic_name = f"com.udacity.chicago.public.transport.weather"
+        self.topic_name = f"org.chicago.cta.weather.v1"
         super().__init__(
             self.topic_name,
             key_schema=Weather.key_schema,

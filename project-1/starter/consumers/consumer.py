@@ -11,6 +11,7 @@ from tornado import gen
 logger = logging.getLogger(__name__)
 BROKER_URL = 'PLAINTEXT://localhost:9092'
 SCHEMA_REGISTRY_URL = 'http://localhost:8081'
+GROUP_ID = 'chicago.cta'
 
 
 class KafkaConsumer:
@@ -32,26 +33,20 @@ class KafkaConsumer:
         self.consume_timeout = consume_timeout
         self.offset_earliest = offset_earliest
 
-        self.broker_properties = {
-            'bootstrap.servers': BROKER_URL,
-            'schema.registry.url': SCHEMA_REGISTRY_URL
-        }
-
         if is_avro is True:
-            self.consumer = AvroConsumer(
-                self.broker_properties
-            )
+            self.consumer = AvroConsumer({
+                'bootstrap.servers': BROKER_URL,
+                'group.id': GROUP_ID,
+                'schema.registry.url': SCHEMA_REGISTRY_URL
+            })
         else:
-            self.consumer = Consumer(
-                self.broker_properties
-            )
-            pass
+            self.consumer = Consumer({
+                'bootstrap.servers': BROKER_URL,
+                'group.id': GROUP_ID,
+            })
 
         self.consumer.subscribe(
-            ['com.udacity.chicago.public.transport.station',
-             'com.udacity.chicago.public.transport.turnstile',
-             'com.udacity.chicago.public.transport.weather',
-             'connector-cta-stations-stations'],
+            [self.topic_name_pattern],
              on_assign=self.on_assign
         )
 
@@ -85,6 +80,7 @@ class KafkaConsumer:
             logger.info(f"error from consumer {message.error()}")
             return 0
         else:
+            self.message_handler(message)
             return 1
 
 

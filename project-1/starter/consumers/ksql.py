@@ -18,11 +18,10 @@ CREATE TABLE turnstile (
     station_name VARCHAR,
     line VARCHAR
 ) WITH (
-    KAFKA_TOPIC='com.udacity.chicago.public.transport.turnstile',
+    KAFKA_TOPIC='org.chicago.cta.station.arrivals.turnstile',
     VALUE_FORMAT='AVRO',
     KEY='timestamp'
 );
-
 CREATE TABLE turnstile_summary
 WITH (
     VALUE_FORMAT='JSON'
