@@ -26,6 +26,8 @@ class Line:
 
     def _handle_station(self, value):
         """Adds the station to this Line's data model"""
+        logger.info(f"value inspection: {value['station_id']}")
+        logger.info(f"color: {self.color} - line: {value['line']}")
         if value["line"] != self.color:
             return
         self.stations[value["station_id"]] = Station.from_message(value)
@@ -57,13 +59,13 @@ class Line:
 
     def process_message(self, message):
         """Given a kafka message, extract data"""
-        if message.topic() == 'org.chicago.cta.stations.table.v1':
+        if message.topic() == 'org.chicago.cta.station.table.v1':
             try:
                 value = json.loads(message.value())
                 self._handle_station(value)
             except Exception as e:
                 logger.fatal("bad station? %s, %s", value, e)
-        elif re.match(r'org.chicago.cta.station.arrivals*', message.topic()):
+        elif message.topic() == 'org.chicago.cta.station.arrivals':
             self._handle_arrival(message)
         elif message.topic() == 'TURNSTILE_SUMMARY':
             json_data = json.loads(message.value())
