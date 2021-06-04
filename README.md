@@ -1,4 +1,4 @@
-# Data Streaming Nanodegree Repository
+# Data Streaming Repository
 
 Kafka in action and further optional research links:
 
